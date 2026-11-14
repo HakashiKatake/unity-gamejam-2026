@@ -24,3 +24,8 @@ Thumbs.db
 *.apk
 *.aab
 *.unitypackage
+
+# Unity generated IDE solution files
+*.csproj
+*.slnx
+*.sln
