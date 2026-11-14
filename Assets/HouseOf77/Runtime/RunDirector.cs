@@ -125,7 +125,7 @@ namespace HouseOf77
             if (Keyboard.current != null)
             {
                 if (Keyboard.current.escapeKey.wasPressedThisFrame && (Phase == RunPhase.Wave || Phase == RunPhase.Boss)) TogglePause();
-                if (Keyboard.current.enterKey.wasPressedThisFrame && Phase == RunPhase.Title) StartRun();
+                if (Keyboard.current.enterKey.wasPressedThisFrame && Phase == RunPhase.Title && !UI.CreditsOpen) StartRun();
             }
             if (Paused) { UI.Tick(Time.unscaledDeltaTime); return; }
             float dt = Time.deltaTime;

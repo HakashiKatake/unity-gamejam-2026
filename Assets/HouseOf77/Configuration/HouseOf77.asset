@@ -222,8 +222,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f747e4aa048d43afa499eaad706c606, type: 3}
   m_Name: HouseOf77
   m_EditorClassIdentifier: HouseOf77.Runtime::HouseOf77.GameConfig
-  waveSeconds: 75
-  revealSeconds: 30
+  waveSeconds: 37
+  revealSeconds: 11
   jackpotSeconds: 20
   playerSpeed: 5.8
   bladeDamage: 12
@@ -232,19 +232,19 @@ MonoBehaviour:
   enemyCapacity: 60
   projectileCapacity: 250
   arenaHalfSize: {x: 14.8, y: 7.1}
-  combatZoom: 5
+  combatZoom: 7
   cameraFollowRate: 7.5
   waves:
-  - spawnInterval: 1
+  - spawnInterval: 3.5
     health: 22
     speed: 1.4
-  - spawnInterval: 0.78
+  - spawnInterval: 3.0
     health: 29
     speed: 1.55
-  - spawnInterval: 0.63
+  - spawnInterval: 2.5
     health: 35
     speed: 1.7
-  - spawnInterval: 0.52
+  - spawnInterval: 2.0
     health: 40
     speed: 1.85
   idle:
