@@ -1,0 +1,25 @@
+Close combat framing
+Follow begins with a smooth step
+Follow converges without overshoot
+Camera stays within arena presentation bounds
+Boss framing smoothly opens up
+Entrances are visible and outside immediate strike range
+Enemy 0 visibly winds up before dealing damage
+Enemy 0 executes its committed attack
+Enemy 0 has a recovery state
+Enemy 0 enters a visible death state
+Enemy 0 returns to the pool after death
+Enemy 1 visibly winds up before dealing damage
+Enemy 1 executes its committed attack
+Enemy 1 has a recovery state
+Enemy 1 enters a visible death state
+Enemy 1 returns to the pool after death
+Enemy 2 visibly winds up before dealing damage
+Enemy 2 executes its committed attack
+Enemy 2 has a recovery state
+Enemy 2 enters a visible death state
+Enemy 2 returns to the pool after death
+Lucky Seven meter grows one kill at a time
+The seventh kill unleashes seven blades and resets the meter
+Combat music starts in Play mode
+Title music resumes on return

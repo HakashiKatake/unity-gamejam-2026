@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Assets/HouseOf77/Editor/HouseGameChecks.cs" />
     <Compile Include="Assets/HouseOf77/Editor/HouseGameSetup.cs" />
+    <Compile Include="Assets/HouseOf77/Editor/HouseMediaSetup.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/HouseOf77/Editor/HouseOf77.Editor.asmdef" />
@@ -618,6 +619,10 @@
     </Reference>
     <Reference Include="UnityEditor.Graphs">
       <HintPath>/Applications/Unity/Hub/Editor/6000.4.10f1/Unity.app/Contents/Resources/Scripting/Managed/UnityEditor.Graphs.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEditor.WebGL.Extensions">
+      <HintPath>/Applications/Unity/Hub/Editor/6000.4.10f1/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEditor.OSXStandalone.Extensions">

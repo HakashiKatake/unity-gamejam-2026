@@ -14,15 +14,16 @@ Open `Assets/HouseOf77/Scenes/HouseOf77.unity` and press Play. The scene is also
 | Space | Dash |
 | Esc | Pause / resume |
 
-The game letterboxes to 16:9 so the whole arena remains visible on different displays. Pause offers sound and screen-shake toggles. Losing focus pauses combat. Settings and best score persist; run upgrades reset on retry.
+The game letterboxes to 16:9. A close camera smoothly follows the player and opens up for the boss. Enemies telegraph their attacks, and each seven kills unleashes a blade burst. Pause offers sound and screen-shake toggles. Losing focus pauses combat. Settings and best score persist; run upgrades reset on retry.
 
 ## Tune or rebuild
 
-`Assets/HouseOf77/Configuration/HouseOf77.asset` holds wave durations, spawn rates, health, damage, speed, capacities, imported sprites, materials, and optional human audio clips. Runtime rules are in `RunRules.cs`; the UI and gameplay components live under `Assets/HouseOf77/Runtime`.
+`Assets/HouseOf77/Configuration/HouseOf77.asset` holds difficulty, camera zoom and follow rate, imported sprites, materials, fonts, and licensed audio clips. Runtime rules are in `RunRules.cs`; the UI and gameplay components live under `Assets/HouseOf77/Runtime`.
 
 The **House of 77** editor menu provides:
 
 - **Prepare Game**: recreate the game scene and art references, preserving an existing configuration's tuning and audio. Save your current scene first. This command intentionally rebuilds only the generated HouseOf77 scene.
+- **Assign Licensed Fonts and Audio**: wire the bundled typography and music, and fill empty sound effects slots.
 - **Build WebGL**: export to `Builds/WebGL`.
 - **Build Windows**: export to `Builds/Windows/HouseOf77.exe` when Windows build support is available.
 

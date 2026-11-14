@@ -20,10 +20,16 @@ The user subsequently requested **no builds and no uploads**. Delivery is the pl
 
 ## External or intentionally unperformed checks
 
-- Human audio clips are not supplied. Optional audio slots are wired and safely silent.
+- Licensed music and sound effects are supplied; playback and track switching have been verified in the Editor. Human listening and mix feedback are still useful.
 - A complete 6–8 minute human playtest and difficulty pass remain recommended. The smoke check accelerates encounter transitions; it is not a full natural-paced playthrough.
 - Browser/export checks and itch-hosted checks were stopped at the user's request. No browser compatibility or hosted-play claim is made.
 - Human Warriors FREE permits non-commercial use only. Credits include the primary author/source links; review before monetization.
+
+## Camera and combat pass
+
+- All 13 Play-mode smoke checks passed again after the changes. Another 25 editor checks covered follow smoothing and bounds, boss zoom, safe spawns, each enemy's windup/strike/recovery/death, the seven-kill burst, and music playback on scene changes. Results: `Documentation/editor-combat-checks.txt`.
+- Additional checks verified the player stays clear of HUD edges at all four corners, spawn spacing remains safe there, and crowds are limited to three concurrent windups or strikes.
+- Captured and inspected the refreshed title, combat, and upgrade screen. No current Unity error entries after these checks. No build or export performed for this pass.
 
 ## Re-run inside Unity
 

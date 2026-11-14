@@ -16,12 +16,12 @@ namespace HouseOf77
         static readonly string[] Descriptions = {
             "+20% blade damage\nMake every hit count.", "+15% casting speed\nKeep the pressure on.", "Two extra angled blades\n40% damage per side blade.", "Pierce one more enemy\nCut through the crowd.", "+1 maximum health\nRestore two health now.", "20% shorter dash cooldown\nAlways an escape route.", "Restore two health\nA little breathing room."
         };
-        RunDirector game; Font font; RectTransform root;
+        RunDirector game; Font font, displayFont, strongFont; RectTransform root;
         GameObject title, hud, intermission, results, pause, credits;
         Text health, wave, time, chips, target, pity, banner, jackpot, bossName, footer, best;
         Text shopChips, shopTarget, odds, spinStatus, reelLeft, reelMiddle, reelRight, resultTitle, resultStats;
-        Text muteLabel, shakeLabel, titleMute;
-        Image waveFill, dashFill, jackpotFill, bossFill;
+        Text muteLabel, shakeLabel, titleMute, streak;
+        Image waveFill, dashFill, jackpotFill, bossFill, streakFill;
         GameObject jackpotPanel, bossPanel;
         Button rigButton, spinButton, continueButton;
         readonly List<Button> upgradeButtons = new List<Button>();
@@ -33,7 +33,9 @@ namespace HouseOf77
 
         public void Initialize(RunDirector owner)
         {
-            game = owner; font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            game = owner; font = owner.Config.bodyFont ? owner.Config.bodyFont : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            displayFont = owner.Config.displayFont ? owner.Config.displayFont : font;
+            strongFont = owner.Config.strongFont ? owner.Config.strongFont : font;
             var canvas = gameObject.AddComponent<Canvas>(); canvas.renderMode = RenderMode.ScreenSpaceOverlay; canvas.sortingOrder = 5000;
             var scaler = gameObject.AddComponent<CanvasScaler>(); scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
             scaler.referenceResolution = new Vector2(1280,720); scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
@@ -54,9 +56,11 @@ namespace HouseOf77
         Text Label(Transform parent, string value, float x, float y, float width, float height, int size, Color color, TextAnchor alignment = TextAnchor.MiddleLeft, FontStyle style = FontStyle.Normal)
         {
             var rt = Rect(value.Length > 25 ? value.Substring(0,25) : value,parent,x,y,width,height); var text = rt.gameObject.AddComponent<Text>();
-            text.font = font; text.text = value; text.fontSize = size; text.color = color; text.alignment = alignment; text.fontStyle = style;
+            text.font = style == FontStyle.Bold ? strongFont : font; text.text = value; text.fontSize = size; text.color = color; text.alignment = alignment;
+            text.fontStyle = text.font == font ? style : FontStyle.Normal;
             text.raycastTarget = false; text.horizontalOverflow = HorizontalWrapMode.Wrap; text.verticalOverflow = VerticalWrapMode.Overflow; return text;
         }
+        Text Heading(Text text) { text.font = displayFont; text.fontStyle = FontStyle.Normal; return text; }
         Image Picture(Transform parent, Sprite sprite, float x, float y, float width, float height, Color color, bool preserve = true)
         {
             var rt = Rect("Imported art",parent,x,y,width,height); var image = rt.gameObject.AddComponent<Image>(); image.sprite = sprite; image.color = color; image.preserveAspect = preserve; image.raycastTarget = false; return image;
@@ -94,9 +98,9 @@ namespace HouseOf77
             Panel("Lower shade",title.transform,640,650,1280,140,new Color(.015f,.021f,.04f,.9f));
             Label(title.transform,"A CURSED CASINO SURVIVAL",318,72,480,24,14,HouseVisuals.Gold);
             Rule(title.transform,176,105,196,new Color(.6f,.45f,.23f));
-            Label(title.transform,"HOUSE",266,204,380,100,90,Cream,TextAnchor.MiddleLeft,FontStyle.Bold);
-            Label(title.transform,"OF",116,307,76,90,39,Muted);
-            Label(title.transform,"77",302,306,272,145,150,HouseVisuals.Gold,TextAnchor.MiddleLeft,FontStyle.Bold);
+            Heading(Label(title.transform,"HOUSE",316,204,480,116,86,Cream,TextAnchor.MiddleLeft));
+            Heading(Label(title.transform,"OF",129,307,102,90,38,Muted));
+            Heading(Label(title.transform,"77",318,306,270,148,136,HouseVisuals.Gold,TextAnchor.MiddleLeft));
             Label(title.transform,"FIGHT TO RIG YOUR FATE.",294,414,432,35,24,Cream,TextAnchor.MiddleLeft,FontStyle.Bold);
             Label(title.transform,"Four waves. One lucky number.\nSurvive the warriors. Break the house.",300,474,444,62,19,Muted);
             var play = Button(title.transform,"ENTER THE HOUSE    →",263,564,370,58,() => game.StartRun(),true);
@@ -104,7 +108,7 @@ namespace HouseOf77
             var mute = Button(title.transform,"SOUND ON",359,624,176,36,() => { game.Audio.ToggleMute(); Refresh(); }); titleMute = mute.GetComponentInChildren<Text>();
             Picture(title.transform,game.Config.machine,938,325,442,354,Color.white);
             Label(title.transform,"THE HOUSE IS WAITING",937,120,420,26,14,HouseVisuals.Gold,TextAnchor.MiddleCenter);
-            Label(title.transform,"77",951,345,220,75,66,Ink,TextAnchor.MiddleCenter,FontStyle.Bold);
+            Heading(Label(title.transform,"77",951,345,220,75,66,Ink,TextAnchor.MiddleCenter));
             Label(title.transform,"LUCK CAN BE BOUGHT.\nSURVIVAL HAS TO BE EARNED.",949,553,430,62,18,Cream,TextAnchor.MiddleCenter);
             best = Label(title.transform,"BEST  000000",1009,657,380,26,14,Muted,TextAnchor.MiddleRight);
             Label(title.transform,"WASD  MOVE     /     MOUSE  AIM & FIRE     /     SPACE  DASH",400,686,650,24,13,Muted);
@@ -115,17 +119,17 @@ namespace HouseOf77
             hud = new GameObject("Combat HUD",typeof(RectTransform)); hud.transform.SetParent(root,false);
             var rt = (RectTransform)hud.transform; rt.anchorMin = Vector2.zero; rt.anchorMax = Vector2.one; rt.offsetMin = rt.offsetMax = Vector2.zero;
             Panel("Top band",hud.transform,640,37,1280,74,new Color(.015f,.02f,.035f,.94f));
-            Label(hud.transform,"HOUSE / 77",114,25,180,30,21,HouseVisuals.Gold,TextAnchor.MiddleLeft,FontStyle.Bold);
+            Heading(Label(hud.transform,"HOUSE / 77",126,25,204,32,20,HouseVisuals.Gold));
             health = Label(hud.transform,"",139,53,230,26,17,Cream);
             wave = Label(hud.transform,"WAVE 01 / 04",640,25,320,26,16,Cream,TextAnchor.MiddleCenter,FontStyle.Bold);
             time = Label(hud.transform,"01:15",640,53,190,28,22,HouseVisuals.Gold,TextAnchor.MiddleCenter);
             chips = Label(hud.transform,"7 CHIPS",1107,29,260,30,25,HouseVisuals.Gold,TextAnchor.MiddleRight,FontStyle.Bold);
             Label(hud.transform,"SPEND THEM BETWEEN WAVES",1092,55,290,20,11,Muted,TextAnchor.MiddleRight);
             waveFill = Bar(hud.transform,640,74,1280,HouseVisuals.Gold);
-            var luck = Panel("Lucky number",hud.transform,1159,159,180,126,new Color(.025f,.03f,.05f,.9f));
-            Label(luck.transform,"LUCKY NUMBER",90,19,170,22,12,HouseVisuals.Gold,TextAnchor.MiddleCenter);
-            target = Label(luck.transform,"? ?",90,62,160,64,46,Cream,TextAnchor.MiddleCenter,FontStyle.Bold);
-            pity = Label(luck.transform,"REVEALS IN 00:45",90,107,170,22,11,Muted,TextAnchor.MiddleCenter);
+            var luck = Panel("Lucky number",hud.transform,904,37,192,59,new Color(.075f,.065f,.09f,.92f));
+            Label(luck.transform,"LUCKY NUMBER",69,18,118,21,13,HouseVisuals.Gold);
+            target = Label(luck.transform,"? ?",150,28,68,51,35,Cream,TextAnchor.MiddleCenter,FontStyle.Bold);
+            pity = Label(luck.transform,"REVEALS IN 00:45",73,41,125,20,12,Muted);
             banner = Label(hud.transform,"",640,143,900,50,23,HouseVisuals.Gold,TextAnchor.MiddleCenter,FontStyle.Bold);
             jackpotPanel = Panel("Overdrive",hud.transform,640,615,430,56,new Color(.09f,.07f,.035f,.94f));
             jackpot = Label(jackpotPanel.transform,"JACKPOT OVERDRIVE",215,23,410,30,21,HouseVisuals.Gold,TextAnchor.MiddleCenter,FontStyle.Bold);
@@ -135,6 +139,8 @@ namespace HouseOf77
             bossFill = Bar(bossPanel.transform,240,46,448,HouseVisuals.Red);
             Panel("Bottom band",hud.transform,640,690,1280,60,new Color(.015f,.02f,.035f,.93f));
             footer = Label(hud.transform,"",315,683,570,25,13,Muted);
+            streak = Label(hud.transform,"LUCKY SEVEN   0 / 7",751,679,242,25,15,HouseVisuals.Gold,TextAnchor.MiddleCenter,FontStyle.Bold);
+            streakFill = Bar(hud.transform,751,701,214,HouseVisuals.Gold);
             Label(hud.transform,"SPACE / DASH",1038,679,150,25,12,Cream,TextAnchor.MiddleRight);
             dashFill = Bar(hud.transform,1029,701,150,HouseVisuals.Blue);
             Button(hud.transform,"PAUSE",1180,690,126,34,() => game.TogglePause());
@@ -143,7 +149,7 @@ namespace HouseOf77
         {
             intermission = Panel("Upgrade and spin",root,640,360,1280,720,new Color(.018f,.024f,.043f,.985f));
             Label(intermission.transform,"BETWEEN THE WAVES",284,46,440,24,13,HouseVisuals.Gold);
-            Label(intermission.transform,"POWER OR PROBABILITY?",417,94,706,60,38,Cream,TextAnchor.MiddleLeft,FontStyle.Bold);
+            Heading(Label(intermission.transform,"POWER OR PROBABILITY?",437,94,746,66,34,Cream));
             shopChips = Label(intermission.transform,"",1093,71,270,52,30,HouseVisuals.Gold,TextAnchor.MiddleRight,FontStyle.Bold);
             Rule(intermission.transform,640,141,1152,new Color(.35f,.28f,.17f));
             var machinePanel = Panel("Machine panel",intermission.transform,288,382,448,442,Card);
@@ -213,7 +219,7 @@ namespace HouseOf77
             results = Panel("Results",root,640,360,1280,720,new Color(.018f,.024f,.043f,.96f));
             foreach (var layer in game.Config.titleLayers) Picture(results.transform,layer,640,360,1280,720,new Color(.4f,.4f,.6f,.18f),false);
             Label(results.transform,"HOUSE / 77",640,80,900,40,19,HouseVisuals.Gold,TextAnchor.MiddleCenter);
-            resultTitle = Label(results.transform,"",640,203,1100,100,63,Cream,TextAnchor.MiddleCenter,FontStyle.Bold);
+            resultTitle = Heading(Label(results.transform,"",640,203,1100,100,57,Cream,TextAnchor.MiddleCenter));
             Rule(results.transform,640,285,700,new Color(.45f,.33f,.17f));
             resultStats = Label(results.transform,"",640,393,950,175,23,Cream,TextAnchor.MiddleCenter);
             Button(results.transform,"ANOTHER HAND    →",640,565,380,58,() => game.StartRun(),true);
@@ -222,7 +228,7 @@ namespace HouseOf77
         void BuildPause()
         {
             pause = Panel("Pause",root,640,360,1280,720,new Color(.012f,.016f,.028f,.94f));
-            Label(pause.transform,"TAKE A BREATH.",640,190,900,70,49,Cream,TextAnchor.MiddleCenter,FontStyle.Bold);
+            Heading(Label(pause.transform,"TAKE A BREATH.",640,190,900,76,49,Cream,TextAnchor.MiddleCenter));
             Label(pause.transform,"YOUR LUCK CAN WAIT.",640,248,800,30,16,HouseVisuals.Gold,TextAnchor.MiddleCenter);
             Button(pause.transform,"BACK TO THE FIGHT",640,330,380,54,() => game.TogglePause(),true);
             var mute = Button(pause.transform,"SOUND ON",640,400,380,44,() => { game.Audio.ToggleMute(); Refresh(); }); muteLabel = mute.GetComponentInChildren<Text>();
@@ -233,8 +239,8 @@ namespace HouseOf77
         void BuildCredits()
         {
             credits = Panel("Credits",root,640,360,1280,720,Ink);
-            Label(credits.transform,"THE PEOPLE BEHIND THE HOUSE",640,110,1000,60,36,HouseVisuals.Gold,TextAnchor.MiddleCenter,FontStyle.Bold);
-            Label(credits.transform,"A game by Saurabh & Prince\n\nBladekeeper — chierit (CC BY 4.0)\nHuman Warriors — Fat Cat Games (free, non-commercial edition)\nPixel Fantasy Slot Machine — Caz Wolf\nHollow Creek icons — maltyy\nParallax Worlds — Nasha\n\nAI assistance: game design, programming and shader code.\nNo generative artwork, music or sound effects were created.\n\nMade for the Official Unity Game Jam 2026 / Lucky Number",640,366,1050,390,20,Cream,TextAnchor.MiddleCenter);
+            Heading(Label(credits.transform,"THE PEOPLE BEHIND THE HOUSE",640,110,1080,68,33,HouseVisuals.Gold,TextAnchor.MiddleCenter));
+            Label(credits.transform,"A game by Saurabh & Prince\n\nBladekeeper — chierit | Warriors — Fat Cat Games\nSlot machine — Caz Wolf | Icons — maltyy | Backgrounds — Nasha\n\nDeadly Roulette & Darkling — Kevin MacLeod (incompetech.com) · CC BY 4.0\nSound effects and reward jingle — Kenney · CC0\nCinzel Decorative — Natanael Gama | Barlow — The Barlow Project · SIL OFL\n\nAI assistance: game design, programming and shader code.\nNo generative artwork, music or sound effects were created.\n\nOfficial Unity Game Jam 2026 / Lucky Number",640,366,1100,410,19,Cream,TextAnchor.MiddleCenter);
             Button(credits.transform,"BACK",640,644,320,48,() => credits.SetActive(false),true);
         }
         public void ShowTitle()
@@ -276,13 +282,15 @@ namespace HouseOf77
                 time.text = boss ? FormatTime(game.CombatSeconds) : FormatTime(Mathf.Max(0,game.WaveRemaining));
                 waveFill.fillAmount = boss ? 1 : game.WaveRemaining/game.Config.waveSeconds;
                 target.text = game.Reveal ? game.Rules.Target.ToString() : "? ?";
-                pity.text = boss ? "BREAK THE HOUSE" : !game.Reveal ? "REVEALS IN "+FormatTime(game.WaveRemaining-game.Config.revealSeconds) : game.Rules.Misses >= 2 ? "NEXT SPIN GUARANTEED" : "BAD LUCK  "+game.Rules.Misses+" / 2";
+                pity.text = boss ? "BREAK THE HOUSE" : !game.Reveal ? "REVEALS IN "+FormatTime(game.WaveRemaining-game.Config.revealSeconds) : game.Rules.Misses >= 2 ? "GUARANTEED SPIN" : "BAD LUCK  "+game.Rules.Misses+" / 2";
                 banner.text = game.Banner;
                 banner.rectTransform.anchoredPosition = new Vector2(640,boss ? -300 : -143);
                 bossPanel.SetActive(boss); if (boss) { bossFill.fillAmount = game.Boss.HealthFraction; bossName.text = game.Boss.BeamWarning ? "THE HOUSE / BEAM INCOMING" : "THE HOUSE"; }
                 jackpotPanel.SetActive(game.JackpotRemaining > 0); jackpotFill.fillAmount = game.JackpotRemaining/game.Config.jackpotSeconds;
                 jackpot.text = "JACKPOT OVERDRIVE / "+Mathf.CeilToInt(game.JackpotRemaining)+"s";
                 dashFill.fillAmount = game.Player.DashReady;
+                streak.text = "LUCKY SEVEN   " + game.RushProgress + " / 7";
+                streakFill.fillAmount = game.RushProgress / 7f;
                 footer.text = game.CombatSeconds < 20 ? "WASD MOVE  /  MOUSE AIM  /  HOLD CLICK FIRE  /  SPACE DASH" : game.Reveal ? "COLLECT CHIPS. BUY POWER OR BETTER ODDS AFTER THE WAVE." : "SHARDCASTER  /  DMG "+Mathf.RoundToInt(game.Config.bladeDamage*game.Rules.DamageMultiplier)+"  /  PIERCE "+game.Rules.Upgrades[3]+"  /  SPLIT "+(game.Rules.Upgrades[2]>0 ? "ON" : "OFF");
             }
             if (title.activeSelf)
@@ -297,7 +305,7 @@ namespace HouseOf77
             }
             if (reelTime > 0) return;
             presenting = false;
-            string value = game.LastSpin.ToString("D2"); reelLeft.text = value[0].ToString(); reelMiddle.text = value[1].ToString(); reelRight.text = game.LastMatch ? "★" : "—";
+            string value = game.LastSpin.ToString("D2"); reelLeft.text = value[0].ToString(); reelMiddle.text = value[1].ToString(); reelRight.text = game.LastMatch ? "+" : "—";
             spinStatus.text = game.LastMatch ? "JACKPOT / 20 SECONDS OF OVERDRIVE\n+2 HEALTH. MAKE IT COUNT." : "NO MATCH / +1 HEALTH\n"+(game.Rules.Misses >= 2 ? "NEXT SPIN IS GUARANTEED." : "THE HOUSE REMEMBERS YOUR BAD LUCK.");
             spinStatus.color = game.LastMatch ? HouseVisuals.Gold : Cream;
             game.Audio.Play(game.LastMatch ? game.Config.jackpotSound : game.Config.chipSound);

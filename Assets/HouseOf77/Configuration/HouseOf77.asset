@@ -193,7 +193,7 @@ Sprite:
         format: 0
         dimension: 0
       m_DataSize: 80
-      _typelessdata: 000070be0000003d000000000000703e0000003d00000000000070be000000bd000000000000703e000000bd000000000000000000000000000000000000000000000000000000000000000000000000
+      _typelessdata: 000070be0000003d000000000000703e0000003d00000000000070be000000bd000000000000703e000000bd000000003333d33e0000003f9a99193f0000003f3333d33e0000e03e9a99193f0000e03e
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
@@ -232,6 +232,8 @@ MonoBehaviour:
   enemyCapacity: 60
   projectileCapacity: 250
   arenaHalfSize: {x: 14.8, y: 7.1}
+  combatZoom: 5
+  cameraFollowRate: 7.5
   waves:
   - spawnInterval: 1
     health: 22
@@ -325,10 +327,19 @@ MonoBehaviour:
   arenaMaterial: {fileID: 2100000, guid: 6fbcf8be863a145b7bce5ec814b2fb9f, type: 2}
   spriteMaterial: {fileID: 2100000, guid: 3dc72f62bfb6e43a0bd001a43175ec07, type: 2}
   ringMaterial: {fileID: 2100000, guid: b7abb1aba63534f9486ad4d62c7c1940, type: 2}
-  castSound: {fileID: 0}
-  impactSound: {fileID: 0}
-  chipSound: {fileID: 0}
-  reelSound: {fileID: 0}
-  jackpotSound: {fileID: 0}
-  damageSound: {fileID: 0}
-  bossSound: {fileID: 0}
+  displayFont: {fileID: 12800000, guid: ea2e378135de24d4e9e06cfeb319b1b2, type: 3}
+  bodyFont: {fileID: 12800000, guid: c25468f010b3d4ae7a23a6a862273a18, type: 3}
+  strongFont: {fileID: 12800000, guid: c5b33075aea7c42ce8d11569c7c56070, type: 3}
+  menuMusic: {fileID: 8300000, guid: 8509f917057d146b58b570994f8cf9a3, type: 3}
+  combatMusic: {fileID: 8300000, guid: 4b657f6ba794d4f808c07a0f0a8272b5, type: 3}
+  castSound: {fileID: 8300000, guid: 399e4add5091344febd1575f8a424817, type: 3}
+  impactSound: {fileID: 8300000, guid: e87770986d724469e8893e3373af2b0e, type: 3}
+  chipSound: {fileID: 8300000, guid: d9db732e07e704a70a22c58489bf04c2, type: 3}
+  reelSound: {fileID: 8300000, guid: 7e790dfe8c1b547308e736869ecb8b47, type: 3}
+  jackpotSound: {fileID: 8300000, guid: 231f32819fbd24f30a96a4c06e8db3a7, type: 3}
+  damageSound: {fileID: 8300000, guid: ce0bc9ef2f26e4f8ea0621dee238f908, type: 3}
+  bossSound: {fileID: 8300000, guid: faa9d64df1a0741eebddb9b0016d09b2, type: 3}
+  dashSound: {fileID: 8300000, guid: e6e0b0259cdbf4f46a62356fe143b342, type: 3}
+  enemyWindupSound: {fileID: 8300000, guid: a0a32cf76506b4ce881a9bc141be6775, type: 3}
+  deathSound: {fileID: 8300000, guid: ce0bc9ef2f26e4f8ea0621dee238f908, type: 3}
+  streakSound: {fileID: 8300000, guid: d9db732e07e704a70a22c58489bf04c2, type: 3}

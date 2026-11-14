@@ -37,10 +37,11 @@ namespace HouseOf77
         public bool Reveal => Phase != RunPhase.Wave || WaveRemaining <= config.revealSeconds;
         public System.Random SpinRandom { get; private set; }
         System.Random offerRandom, targetRandom;
-        float spawnTimer, jackpotPulse, shake, bannerTimer;
-        int killProgress, chipsSpawned;
+        float spawnTimer, rushTimer, jackpotPulse, shake, bannerTimer;
+        int killProgress, chipsSpawned, killChain;
+        public int RushProgress => killChain;
         Material arenaMaterial;
-        Vector3 cameraHome = new Vector3(0,0,-10);
+        HouseCamera followCamera;
         Transform world;
         int screenWidth, screenHeight;
         public string Banner { get; private set; }
@@ -53,7 +54,7 @@ namespace HouseOf77
             ScreenShake = PlayerPrefs.GetInt("House77.Shake",1) == 1;
             GameCamera = Camera.main;
             if (!GameCamera) { var camera = new GameObject("Main Camera"); camera.tag = "MainCamera"; GameCamera = camera.AddComponent<Camera>(); camera.AddComponent<AudioListener>(); }
-            GameCamera.orthographic = true; GameCamera.orthographicSize = 9; GameCamera.transform.position = cameraHome;
+            followCamera = new HouseCamera(GameCamera, config);
             GameCamera.backgroundColor = new Color(.018f,.021f,.035f); GameCamera.clearFlags = CameraClearFlags.SolidColor;
             FitCamera();
             world = new GameObject("Casino arena").transform; world.SetParent(transform);
@@ -70,7 +71,7 @@ namespace HouseOf77
                 var events = new GameObject("EventSystem"); events.AddComponent<EventSystem>(); events.AddComponent<InputSystemUIInputModule>();
             }
             UI = new GameObject("House of 77 — Interface").AddComponent<HouseUI>(); UI.Initialize(this);
-            Player.gameObject.SetActive(false); UI.ShowTitle();
+            Player.gameObject.SetActive(false); UI.ShowTitle(); Audio.SetScene(Phase);
         }
         void BuildArena()
         {
@@ -97,7 +98,7 @@ namespace HouseOf77
             int seed = Environment.TickCount;
             SpinRandom = new System.Random(seed); targetRandom = new System.Random(seed ^ 771); offerRandom = new System.Random(seed ^ 7777);
             Wave = Kills = 0; CombatSeconds = JackpotRemaining = 0; Won = false; LastMatch = false; LastSpin = 0;
-            Paused = false; Time.timeScale = 1; Player.ResetPlayer(); BeginNextEncounter();
+            Paused = false; Time.timeScale = 1; Player.ResetPlayer(); followCamera.Reset(Player.Position); BeginNextEncounter();
         }
         public void BeginNextEncounter()
         {
@@ -106,16 +107,16 @@ namespace HouseOf77
             if (Wave <= 4)
             {
                 Phase = RunPhase.Wave; Rules.BeginWave(targetRandom); WaveRemaining = config.waveSeconds;
-                spawnTimer = 1.2f; killProgress = chipsSpawned = 0;
+                spawnTimer = .35f; rushTimer = 16f; killProgress = chipsSpawned = killChain = 0;
                 Announce("WAVE 0"+Wave+"  /  "+new [] {"THE WELCOME","RAISE THE STAKES","GILDED COMPANY","ALL IN"}[Wave-1]);
             }
             else
             {
-                Phase = RunPhase.Boss; Boss.Begin(); Announce("FINAL ENCOUNTER  /  THE HOUSE");
+                Phase = RunPhase.Boss; killChain = 0; Boss.Begin(); Announce("FINAL ENCOUNTER  /  THE HOUSE");
             }
-            if (LastMatch) { JackpotRemaining = config.jackpotSeconds; jackpotPulse = 0; Effects.Jackpot(Player.Position); Audio.Play(config.jackpotSound); }
+            if (LastMatch) { JackpotRemaining = config.jackpotSeconds; jackpotPulse = 0; Effects.Jackpot(Player.Position); Audio.Reward(config.jackpotSound); }
             else JackpotRemaining = 0;
-            UI.ShowCombat(); NotifyHud();
+            UI.ShowCombat(); NotifyHud(); Audio.SetScene(Phase);
         }
         void Update()
         {
@@ -140,7 +141,7 @@ namespace HouseOf77
                 }
                 if (Phase == RunPhase.Wave)
                 {
-                    float before = WaveRemaining; WaveRemaining -= dt; spawnTimer -= dt;
+                    float before = WaveRemaining; WaveRemaining -= dt; spawnTimer -= dt; rushTimer -= dt;
                     if (before > config.revealSeconds && Reveal) { Announce("YOUR LUCKY NUMBER IS "+Rules.Target); Effects.Ring(Player.Position,HouseVisuals.Gold,3,.7f); }
                     if (WaveRemaining <= 0) { OpenIntermission(); UI.Tick(Time.unscaledDeltaTime); return; }
                     if (spawnTimer <= 0)
@@ -149,6 +150,12 @@ namespace HouseOf77
                         int type = Wave >= 3 && UnityEngine.Random.value < .16f ? 2 : Wave >= 2 && UnityEngine.Random.value < .32f ? 1 : 0;
                         SpawnEnemy(type);
                     }
+                    if (rushTimer <= 0 && WaveRemaining > 6)
+                    {
+                        rushTimer = 16 + UnityEngine.Random.Range(-2f, 2f);
+                        for (int i = 0; i < 2 + Wave / 2; i++) SpawnEnemy(i == 0 && Wave >= 2 ? 1 : 0);
+                        if (string.IsNullOrEmpty(Banner)) Announce("THE HOUSE SENDS A RUSH");
+                    }
                 }
                 else Boss.Tick(dt);
                 foreach (var enemy in Enemies.Items) { if (!CombatActive) break; if (enemy.gameObject.activeSelf) enemy.Tick(dt); }
@@ -156,21 +163,52 @@ namespace HouseOf77
                 foreach (var chip in Pickups.Items) if (chip.gameObject.activeSelf) chip.Tick(dt);
             }
             arenaMaterial.SetFloat("_Luck",JackpotRemaining > 0 || Won ? 1 : 0);
-            shake = Mathf.Max(0,shake-dt*1.5f);
-            GameCamera.transform.position = cameraHome + (ScreenShake ? (Vector3)UnityEngine.Random.insideUnitCircle*shake : Vector3.zero);
+            if (Player.gameObject.activeSelf) arenaMaterial.SetVector("_Focus", Player.Position + Vector2.up * .45f);
+            arenaMaterial.SetFloat("_FocusStrength", Player.gameObject.activeSelf ? 1 : 0);
             UI.Tick(Time.unscaledDeltaTime);
+        }
+        void LateUpdate()
+        {
+            if (!CombatActive || !Player) return;
+            float dt = Time.deltaTime;
+            shake = Mathf.MoveTowards(shake, 0, dt * 1.0f);
+            followCamera.Tick(Player.Position, Player.Aim, Phase == RunPhase.Boss ? Boss.Position : (Vector2?)null, dt, ScreenShake ? shake : 0);
+        }
+        public bool IsOnCamera(Vector2 point) => followCamera.IsVisible(point, .25f);
+        public bool CanStartAttack(bool ranged)
+        {
+            int attacks = 0;
+            foreach (var enemy in Enemies.Items)
+            {
+                if (!enemy.Alive || (enemy.State != EnemyState.Windup && enemy.State != EnemyState.Strike)) continue;
+                if (ranged && enemy.Ranged) return false;
+                if (++attacks >= 3) return false;
+            }
+            return true;
         }
         public void SpawnEnemy(int kind)
         {
             var enemy = Enemies.Get(); if (!enemy) return;
-            Vector2 p = Vector2.zero;
-            for (int attempt = 0; attempt < 20; attempt++)
+            Vector2 p = Vector2.zero, best = Vector2.zero;
+            float bestScore = float.NegativeInfinity;
+            Vector2 view = Vector2.Scale(followCamera.HalfView, new Vector2(.91f,.73f));
+            for (int attempt = 0; attempt < 22; attempt++)
             {
-                bool horizontal = UnityEngine.Random.value < .5f;
-                p = horizontal ? new Vector2(UnityEngine.Random.Range(-14,14),UnityEngine.Random.value < .5f ? -6.6f : 6.6f) : new Vector2(UnityEngine.Random.value < .5f ? -14.3f : 14.3f,UnityEngine.Random.Range(-6,6));
-                if (Vector2.Distance(p,Player.Position) > 5) break;
+                float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2);
+                Vector2 offset = new Vector2(Mathf.Cos(angle) * view.x, Mathf.Sin(angle) * view.y);
+                p = ClampToArena(followCamera.Center + offset);
+                float distance = Vector2.Distance(p, Player.Position);
+                if (distance < 3.7f) continue;
+                if (Phase == RunPhase.Boss && (p - Boss.Position).sqrMagnitude < 5.2f) continue;
+                bool occupied = false;
+                foreach (var other in Enemies.Items)
+                    if (other != enemy && other.gameObject.activeSelf && (p - other.Position).sqrMagnitude < 1.15f) { occupied = true; break; }
+                float score = -Mathf.Abs(distance - 5.6f) - (occupied ? 5 : 0);
+                if (score > bestScore) { bestScore = score; best = p; }
+                if (!occupied && distance < 7.5f) break;
             }
-            enemy.Spawn(p,kind,config.waves[Mathf.Clamp(Wave-1,0,3)]);
+            if (float.IsNegativeInfinity(bestScore)) { enemy.gameObject.SetActive(false); return; }
+            enemy.Spawn(best,kind,config.waves[Mathf.Clamp(Wave-1,0,3)]);
         }
         public void Shoot(Vector2 position, Vector2 direction, float damage, bool hostile, int pierce)
         {
@@ -179,6 +217,15 @@ namespace HouseOf77
         public void Killed(Vector2 position, bool elite)
         {
             Kills++; killProgress += elite ? 4 : 1;
+            if (++killChain >= 7)
+            {
+                killChain = 0;
+                Vector2 origin = Player.Position + Vector2.up * .45f;
+                for (int i = 0; i < 7; i++) Shoot(origin, HouseVisuals.Rotate(Player.Aim, i * (360f/7)), config.bladeDamage * Rules.DamageMultiplier * 1.5f, false, 1);
+                Effects.Ring(Player.Position, HouseVisuals.Gold, 3.3f, .5f);
+                Effects.Sparks(origin, HouseVisuals.Gold, 16); Shake(.105f); Audio.Reward(config.streakSound);
+                Announce("LUCKY SEVEN  /  BLADE BURST");
+            }
             while (killProgress >= 2 && chipsSpawned < 21)
             {
                 killProgress -= 2; chipsSpawned++; var chip = Pickups.Get(); if (chip) chip.Spawn(position+UnityEngine.Random.insideUnitCircle*.3f); else Rules.AwardChips(1);
@@ -190,7 +237,7 @@ namespace HouseOf77
             foreach (var chip in Pickups.Items) if (chip.gameObject.activeSelf) chip.Collect();
             Phase = RunPhase.Intermission; Player.SetInput(false); JackpotRemaining = 0;
             foreach (var enemy in Enemies.Items) if (enemy.gameObject.activeSelf) Effects.Sparks(enemy.Position,new Color(.5f,.3f,.8f),3);
-            Enemies.Clear(); Bullets.Clear(); UI.ShowIntermission(Rules.Offers(offerRandom));
+            Enemies.Clear(); Bullets.Clear(); UI.ShowIntermission(Rules.Offers(offerRandom)); Audio.SetScene(Phase);
         }
         public bool BuyUpgrade(UpgradeKind kind)
         {
@@ -212,11 +259,11 @@ namespace HouseOf77
             Enemies.Clear(); Bullets.Clear(); Pickups.Clear(); Boss.gameObject.SetActive(false);
             if (!win) Player.ShowDeath(); else { Effects.Jackpot(Player.Position); Audio.Play(config.jackpotSound); }
             if (Score > BestScore) { PlayerPrefs.SetInt("House77.Best",Score); PlayerPrefs.Save(); }
-            Banner = ""; UI.ShowResults();
+            Banner = ""; UI.ShowResults(); Audio.SetScene(Phase);
         }
         public void ReturnToTitle()
         {
-            Paused = false; Time.timeScale = 1; ClearCombat(); Phase = RunPhase.Title; Player.SetInput(false); Player.gameObject.SetActive(false); UI.ShowTitle();
+            Paused = false; Time.timeScale = 1; ClearCombat(); Phase = RunPhase.Title; Player.SetInput(false); Player.gameObject.SetActive(false); UI.ShowTitle(); Audio.SetScene(Phase);
         }
         void ClearCombat()
         {
@@ -225,7 +272,7 @@ namespace HouseOf77
         }
         public void TogglePause()
         {
-            Paused = !Paused; Time.timeScale = Paused ? 0 : 1; Player.SetInput(!Paused); UI.ShowPause(Paused);
+            Paused = !Paused; Time.timeScale = Paused ? 0 : 1; Player.SetInput(!Paused); UI.ShowPause(Paused); Audio.SetScene(Phase, Paused);
         }
         void OnApplicationFocus(bool focus) { if (!focus && CombatActive) TogglePause(); }
         void OnDestroy() { Time.timeScale = 1; if (arenaMaterial) Destroy(arenaMaterial); }
@@ -236,7 +283,7 @@ namespace HouseOf77
         void FitCamera()
         {
             screenWidth = Screen.width; screenHeight = Screen.height;
-            float ratio = (float)screenWidth / Mathf.Max(1,screenHeight), target = 16f/9;
+            float ratio = (float)screenWidth / Mathf.Max(1,screenHeight), target = HouseCamera.Aspect;
             if (ratio < target) { float height=ratio/target; GameCamera.rect=new Rect(0,(1-height)/2,1,height); }
             else { float width=target/ratio; GameCamera.rect=new Rect((1-width)/2,0,width,1); }
         }

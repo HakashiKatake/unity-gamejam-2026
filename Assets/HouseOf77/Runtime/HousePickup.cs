@@ -23,7 +23,7 @@ namespace HouseOf77
         {
             if (!gameObject.activeSelf) return;
             int gained = game.Rules.AwardChips(1);
-            if (gained > 0) { game.Audio.Play(game.Config.chipSound,.35f); game.Effects.Sparks(transform.position,HouseVisuals.Gold,2); game.NotifyHud(); }
+            if (gained > 0) { game.Audio.Chip(); game.Effects.Sparks(transform.position,HouseVisuals.Gold,2); game.NotifyHud(); }
             gameObject.SetActive(false);
         }
     }

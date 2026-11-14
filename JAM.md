@@ -26,7 +26,7 @@ The user later requested no builds and no uploads. The current handoff is the Un
 - Run EditMode tests in assembly `HouseOf77.Tests`.
 - Check start, movement, aim/fire, dash, pause, shop, spin, boss, death, victory, retry.
 - Test a clean extracted WebGL build and the itch-hosted version.
-- Record or import human-made audio and assign it to GameConfig. No audio exists in the original imported assets. Empty audio fields safely remain silent.
+- Licensed music and sound effects are assigned in GameConfig. Verify the mix through a full human playtest.
 - Publish for free. The imported Human Warriors FREE edition permits non-commercial use only. Review the author's terms before paid distribution or enabling donations.
 - Include `CREDITS.md` and AI-assistance disclosure in the game page.
 - WebGL should be marked playable in browser. A game-page upload must also be entered separately into the jam.
@@ -35,7 +35,7 @@ The user later requested no builds and no uploads. The current handoff is the Un
 ## Responsibilities and cuts
 
 Implementation: gameplay, scene, UI, shaders, effects, automated checks, browser export.
-Saurabh and Prince: human audio recordings, final playtest, account/page details, final submission verification.
+Saurabh and Prince: final playtest, account/page details, final submission verification.
 
 Cut order: music, decorative effects, elite enemy, additional cards. Retain combat, odds choices, jackpot, boss, and a complete ending.
 

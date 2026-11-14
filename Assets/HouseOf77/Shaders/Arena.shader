@@ -1,6 +1,6 @@
 Shader "HouseOf77/Arena"
 {
-    Properties { _Color("Stone", Color) = (0.065,0.075,0.11,1) _Luck("Luck", Range(0,1))=0 }
+    Properties { _Color("Stone", Color) = (0.065,0.075,0.11,1) _Luck("Luck", Range(0,1))=0 _Focus("Player", Vector)=(0,0,0,0) _FocusStrength("Player Focus", Range(0,1))=0 }
     SubShader
     {
         Tags { "RenderPipeline"="UniversalPipeline" "RenderType"="Opaque" }
@@ -13,7 +13,7 @@ Shader "HouseOf77/Arena"
             struct Attributes { float4 positionOS:POSITION; float2 uv:TEXCOORD0; };
             struct Varyings { float4 positionCS:SV_POSITION; float2 uv:TEXCOORD0; float2 world:TEXCOORD1; };
             CBUFFER_START(UnityPerMaterial)
-            float4 _Color; float _Luck;
+            float4 _Color, _Focus; float _Luck, _FocusStrength;
             CBUFFER_END
             Varyings vert(Attributes a) { Varyings o; o.positionCS=TransformObjectToHClip(a.positionOS.xyz); o.world=TransformObjectToWorld(a.positionOS.xyz).xy; o.uv=a.uv; return o; }
             float hash(float2 p) { return frac(sin(dot(p,float2(127.1,311.7)))*43758.5453); }
@@ -38,6 +38,9 @@ Shader "HouseOf77/Arena"
                 float border=max(abs(w.x)/15.4,abs(w.y)/7.7);
                 c*=1-smoothstep(.65,1.08,border)*.6;
                 c+=float3(.07,.035,.12)*exp(-abs(abs(w.x)-15.1)*4)*(.75+.25*sin(_Time.y));
+                float spotlight=1-smoothstep(.7,5.6,length((w-_Focus.xy)*float2(.86,1.05)));
+                c*=lerp(1,.68+spotlight*.34,_FocusStrength);
+                c+=lerp(float3(.015,.027,.042),float3(.06,.038,.008),_Luck)*spotlight*_FocusStrength;
                 return half4(c,1);
             }
             ENDHLSL

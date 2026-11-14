@@ -10,13 +10,21 @@ Game by Saurabh and Prince. Code, presentation, and game design developed with A
 | Hollow Creek Survival Icons Vol. 1 FREE | [maltyy](https://maltyy.itch.io/) | Included LICENSE.txt permits personal/commercial game use and modification; no asset redistribution. Upgrade icons. |
 | Nasha's Parallax Worlds FREE | Nasha, source pack imported by the team | Included LICENSE.txt permits game use and modification; no asset redistribution. Dungeon Gate layers used in menu backgrounds. |
 | Arena, warnings, particles, HUD | Saurabh and Prince, with AI coding assistance | Handwritten shader code, geometry, Unity particles and UI. No generated image files. |
-| Typeface | Unity built-in LegacyRuntime font | Provided by the Unity runtime. |
+| Cinzel Decorative Black | [Natanael Gama](https://fonts.google.com/specimen/Cinzel+Decorative) | SIL Open Font License 1.1. Display lettering. |
+| Barlow Semi Condensed Regular and SemiBold | [The Barlow Project](https://fonts.google.com/specimen/Barlow+Semi+Condensed) | SIL Open Font License 1.1. HUD and interface. |
+| Deadly Roulette | [Kevin MacLeod](https://incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1600033) | CC BY 4.0. Title and results music. Unedited recording; playback fades applied in-engine. |
+| Darkling | [Kevin MacLeod](https://aux.incompetech.com/music/royalty-free/index.html?Search=Search&isrc=USUAN1700050) | CC BY 4.0. Combat, boss, and intermission music. Unedited recording; playback fades applied in-engine. |
+| RPG Audio, Casino Audio, Impact Sounds, Music Jingles | [Kenney](https://kenney.nl/assets/category:Audio) | CC0. Cast, dash, pickups, reel, windup, damage, defeat, boss cues, and jackpot. |
 
 Licenses remain in the original imported asset folders. Credits do not replace license conditions. Publish this build without a purchase price; review the non-commercial warrior license before monetization. The submission page should link the asset authors above.
 
 ## Audio
 
-The imported project contains no audio recordings. `GameConfig` has optional fields for cast, impact, chip, reel, jackpot, damage, and boss clips. Assign only human-recorded or appropriately licensed non-generated audio. Empty fields are handled safely without synthesizing substitute sounds.
+“Deadly Roulette” and “Darkling” by Kevin MacLeod (incompetech.com), licensed under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/). The downloaded source files are kept intact.
+
+Kenney source packs: [RPG Audio](https://kenney.nl/assets/rpg-audio), [Casino Audio](https://kenney.nl/assets/casino-audio), [Impact Sounds](https://kenney.nl/assets/impact-sounds), and [Music Jingles](https://kenney.nl/assets/music-jingles). Copies were recovered from the [RPG Audio archive](https://opengameart.org/content/50-rpg-sound-effects) and the [CC0 SFX mirror](https://github.com/Mcamento8/open-game-sfx-index/blob/main/SOURCES.md). Original clip names are retained in `Assets/HouseOf77/Media/Audio`.
+
+The full font licenses are in `Assets/HouseOf77/Media/Fonts`. Keep their license and copyright notices with any redistributed copies of the fonts.
 
 ## Jam AI disclosure
 

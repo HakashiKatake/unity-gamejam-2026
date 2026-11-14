@@ -14,6 +14,8 @@ Four waves. Four spins. One possessed slot machine standing between you and free
 
 Even bad luck has a limit: miss twice and the house owes you a jackpot.
 
+Read the enemy windups, dodge their strikes, and earn a seven-blade burst every seven kills.
+
 **Controls:** WASD / arrows to move. Mouse to aim. Hold left-click to shoot. Space to dash. Esc to pause. Keyboard and mouse required; desktop browser recommended.
 
 **Run length:** approximately 6–8 minutes, excluding time spent making upgrade choices.

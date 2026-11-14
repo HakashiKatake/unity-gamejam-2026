@@ -6,7 +6,7 @@ namespace HouseOf77
 {
     public sealed class HousePlayer : MonoBehaviour
     {
-        RunDirector game; SpriteRenderer sprite; MaterialPropertyBlock block; LineRenderer reticle;
+        RunDirector game; SpriteRenderer sprite; MaterialPropertyBlock block; LineRenderer reticle, halo, locator;
         InputActionMap controls; InputAction move, attack, dash;
         Vector2 dashDirection = Vector2.right, lastMove = Vector2.right;
         float dashTime, dashCooldown, protection, fireTimer, animationTime, castTime, hitTime, trailTime;
@@ -20,7 +20,12 @@ namespace HouseOf77
         {
             game = owner; block = new MaterialPropertyBlock();
             sprite = HouseVisuals.Sprite("Bladekeeper", transform, game.Config.idle[0], game.Config.spriteMaterial, 0);
+            sprite.transform.localScale = new Vector3(1.19f,1.19f,1);
             HouseVisuals.Shadow(transform, game.Config);
+            halo = HouseVisuals.Circle("Bladekeeper's ward",transform,game.Config.spriteMaterial,.56f,new Color(.44f,.83f,1,.65f),.027f,-11);
+            halo.transform.localScale = new Vector3(1,.66f,1);
+            locator = HouseVisuals.Line("Player locator", transform, game.Config.spriteMaterial,
+                new[] {new Vector3(-.12f,1.67f), new Vector3(0,1.53f), new Vector3(.12f,1.67f)}, HouseVisuals.Blue,.025f,700);
             reticle = HouseVisuals.Circle("Blade aiming reticle",game.transform,game.Config.spriteMaterial,.15f,new Color(.6f,.9f,1,.7f),.025f,2000);
             reticle.gameObject.SetActive(false);
             // Reuse the existing project's Player actions without changing the imported asset.
@@ -54,6 +59,7 @@ namespace HouseOf77
                 dashDirection = input.sqrMagnitude > .01f ? input.normalized : lastMove;
                 dashTime = .18f; dashCooldown = game.Rules.DashCooldown;
                 game.Effects.Ring(Position, HouseVisuals.Blue, .9f, .22f);
+                game.Audio.Play(game.Config.dashSound, .62f);
             }
             if (dashTime > 0)
             {
@@ -61,6 +67,11 @@ namespace HouseOf77
                 if (trailTime <= 0) { trailTime = .035f; game.Effects.Sparks(Position, HouseVisuals.Blue, 2); }
             }
             transform.position = game.ClampToArena(Position + input * game.Config.playerSpeed * dt);
+            if (Mouse.current != null)
+            {
+                Vector2 direction = (Vector2)reticle.transform.position - (Position + Vector2.up * .6f);
+                if (direction.sqrMagnitude > .001f) Aim = direction.normalized;
+            }
             if (!attack.IsPressed()) requireAttackRelease = false;
             if (!requireAttackRelease && attack.IsPressed() && fireTimer <= 0 && (!EventSystem.current || !EventSystem.current.IsPointerOverGameObject()))
             {
@@ -72,13 +83,20 @@ namespace HouseOf77
                     game.Shoot(Position + Vector2.up * .6f, HouseVisuals.Rotate(Aim, 14), damage * .4f, false, game.Rules.Upgrades[3]);
                     game.Shoot(Position + Vector2.up * .6f, HouseVisuals.Rotate(Aim, -14), damage * .4f, false, game.Rules.Upgrades[3]);
                 }
-                castTime = .19f; game.Audio.Cast(); game.Effects.Sparks(Position + Vector2.up * .6f + Aim * .5f, HouseVisuals.Blue, 1);
+                castTime = .19f; game.Audio.Cast(); game.Effects.Sparks(Position + Vector2.up * .6f + Aim * .5f, game.JackpotRemaining > 0 ? HouseVisuals.Gold : HouseVisuals.Blue, 3);
             }
             Sprite[] frames = dashTime > 0 ? game.Config.roll : hitTime > 0 ? game.Config.hit : castTime > 0 ? game.Config.cast : input.sqrMagnitude > .01f ? game.Config.run : game.Config.idle;
-            sprite.sprite = frames[(int)(animationTime * (castTime > 0 ? 18 : 11)) % frames.Length];
+            int frame = frames == game.Config.roll ? Mathf.FloorToInt((1 - dashTime/.18f) * frames.Length)
+                : frames == game.Config.hit ? Mathf.FloorToInt((1 - hitTime/.22f) * frames.Length)
+                : frames == game.Config.cast ? Mathf.FloorToInt((1 - castTime/.19f) * frames.Length)
+                : (int)(animationTime * (frames == game.Config.run ? 14 : 8)) % frames.Length;
+            sprite.sprite = frames[Mathf.Clamp(frame,0,frames.Length-1)];
             sprite.flipX = Aim.x < 0; sprite.sortingOrder = 100 - Mathf.RoundToInt(Position.y * 10);
-            sprite.color = protection > 0 && Mathf.Sin(animationTime*45) > 0 ? new Color(1,1,1,.45f) : Color.white;
-            block.SetFloat("_Flash", Mathf.Clamp01(hitTime * 5)); block.SetFloat("_Gold", game.JackpotRemaining > 0 ? .65f : 0); sprite.SetPropertyBlock(block);
+            sprite.color = protection > 0 && Mathf.Sin(animationTime*34) > 0 ? new Color(1,1,1,.76f) : Color.white;
+            Color ward = game.JackpotRemaining > 0 ? HouseVisuals.Gold : HouseVisuals.Blue;
+            ward.a = Mathf.Lerp(.32f,.79f,DashReady); halo.startColor = halo.endColor = ward;
+            locator.startColor = locator.endColor = ward;
+            block.SetFloat("_Flash", Mathf.Clamp01(hitTime * 4)); block.SetFloat("_Gold", game.JackpotRemaining > 0 ? .65f : 0); sprite.SetPropertyBlock(block);
         }
         public void Damage(Vector2 source)
         {

@@ -16,6 +16,9 @@ namespace HouseOf77
         public int enemyCapacity = 60;
         public int projectileCapacity = 250;
         public Vector2 arenaHalfSize = new Vector2(14.8f, 7.1f);
+        [Header("Combat camera")]
+        [Min(3)] public float combatZoom = 5.0f;
+        [Min(1)] public float cameraFollowRate = 7.5f;
         public WaveTuning[] waves = {
             new WaveTuning { spawnInterval = 1.0f, health = 22, speed = 1.4f },
             new WaveTuning { spawnInterval = .78f, health = 29, speed = 1.55f },
@@ -28,8 +31,12 @@ namespace HouseOf77
         public Sprite[] symbols, icons, titleLayers;
         [Header("Handwritten shaders")]
         public Material arenaMaterial, spriteMaterial, ringMaterial;
-        [Header("Human recordings — assign clips here")]
+        [Header("Typography")]
+        public Font displayFont, bodyFont, strongFont;
+        [Header("Licensed music and effects")]
+        public AudioClip menuMusic, combatMusic;
         public AudioClip castSound, impactSound, chipSound, reelSound, jackpotSound, damageSound, bossSound;
+        public AudioClip dashSound, enemyWindupSound, deathSound, streakSound;
     }
     [System.Serializable]
     public struct WaveTuning
