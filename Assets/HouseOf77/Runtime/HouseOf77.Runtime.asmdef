@@ -1,0 +1,4 @@
+{
+  "name": "HouseOf77.Runtime",
+  "references": ["Unity.InputSystem", "UnityEngine.UI"]
+}

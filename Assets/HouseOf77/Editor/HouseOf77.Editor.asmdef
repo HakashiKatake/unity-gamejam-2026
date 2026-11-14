@@ -1,0 +1,5 @@
+{
+  "name": "HouseOf77.Editor",
+  "references": ["HouseOf77.Runtime", "Unity.InputSystem", "UnityEngine.UI"],
+  "includePlatforms": ["Editor"]
+}

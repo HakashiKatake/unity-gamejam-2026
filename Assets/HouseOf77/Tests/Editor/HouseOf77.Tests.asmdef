@@ -1,0 +1,6 @@
+{
+  "name": "HouseOf77.Tests",
+  "references": ["HouseOf77.Runtime"],
+  "includePlatforms": ["Editor"],
+  "optionalUnityReferences": ["TestAssemblies"]
+}

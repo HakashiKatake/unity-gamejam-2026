@@ -1,0 +1,18 @@
+{
+    "passed": true,
+    "checks": [
+        "WASD movement",
+        "damage and invulnerability",
+        "dash input and cooldown",
+        "mouse aim and casting",
+        "projectile collision and enemy death",
+        "shop click guard and input isolation",
+        "paid odds transaction",
+        "reel animation lock and next wave",
+        "pause and resume",
+        "all waves and boss attack cycle",
+        "victory",
+        "clean retry",
+        "defeat"
+    ]
+}

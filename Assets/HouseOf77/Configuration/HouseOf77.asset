@@ -1,0 +1,334 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!213 &-8160960831040423917
+Sprite:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Blade projectile crop
+  m_Rect:
+    serializedVersion: 2
+    x: 33
+    y: 14
+    width: 15
+    height: 2
+  m_Offset: {x: 0, y: 0}
+  m_Border: {x: 0, y: 0, z: 0, w: 0}
+  m_PixelsToUnits: 32
+  m_Pivot: {x: 0.5, y: 0.5}
+  m_Extrude: 0
+  m_IsPolygon: 0
+  m_PackingTag: 
+  m_RenderDataKey:
+    c192161ed91a74f95bdcd3a167617fcd: -8160960831040423917
+  m_AtlasTags: []
+  m_SpriteAtlas: {fileID: 0}
+  m_RD:
+    serializedVersion: 3
+    texture: {fileID: 2800000, guid: 358552b3110e44c4791e2b018b803564, type: 3}
+    alphaTexture: {fileID: 0}
+    secondaryTextures: []
+    m_SubMeshes:
+    - serializedVersion: 2
+      firstByte: 0
+      indexCount: 6
+      topology: 0
+      baseVertex: 0
+      firstVertex: 0
+      vertexCount: 4
+      localAABB:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+    m_IndexBuffer: 000001000200020001000300
+    m_VertexData:
+      serializedVersion: 3
+      m_VertexCount: 4
+      m_Channels:
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 3
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 1
+        offset: 0
+        format: 0
+        dimension: 2
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      m_DataSize: 80
+      _typelessdata: 000070be0000003d000000000000703e0000003d00000000000070be000000bd000000000000703e000000bd000000003333d33e0000003f9a99193f0000003f3333d33e0000e03e9a99193f0000e03e
+    m_Bindpose: []
+    textureRect:
+      serializedVersion: 2
+      x: 33
+      y: 14
+      width: 15
+      height: 2
+    textureRectOffset: {x: 0, y: 0}
+    atlasRectOffset: {x: -1, y: -1}
+    settingsRaw: 64
+    uvTransform: {x: 32, y: 40.5, z: 32, w: 15}
+    downscaleMultiplier: 1
+  m_AtlasRD:
+    serializedVersion: 3
+    texture: {fileID: 2800000, guid: 358552b3110e44c4791e2b018b803564, type: 3}
+    alphaTexture: {fileID: 0}
+    secondaryTextures: []
+    m_SubMeshes:
+    - serializedVersion: 2
+      firstByte: 0
+      indexCount: 6
+      topology: 0
+      baseVertex: 0
+      firstVertex: 0
+      vertexCount: 4
+      localAABB:
+        m_Center: {x: 0, y: 0, z: 0}
+        m_Extent: {x: 0, y: 0, z: 0}
+    m_IndexBuffer: 000001000200020001000300
+    m_VertexData:
+      serializedVersion: 3
+      m_VertexCount: 4
+      m_Channels:
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 3
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 1
+        offset: 0
+        format: 0
+        dimension: 2
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      - stream: 0
+        offset: 0
+        format: 0
+        dimension: 0
+      m_DataSize: 80
+      _typelessdata: 000070be0000003d000000000000703e0000003d00000000000070be000000bd000000000000703e000000bd000000000000000000000000000000000000000000000000000000000000000000000000
+    m_Bindpose: []
+    textureRect:
+      serializedVersion: 2
+      x: 33
+      y: 14
+      width: 15
+      height: 2
+    textureRectOffset: {x: 0, y: 0}
+    atlasRectOffset: {x: -1, y: -1}
+    settingsRaw: 64
+    uvTransform: {x: 32, y: 40.5, z: 32, w: 15}
+    downscaleMultiplier: 1
+  m_PhysicsShape: []
+  m_Bones: []
+  m_ScriptableObjects: []
+  m_SpriteID: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f747e4aa048d43afa499eaad706c606, type: 3}
+  m_Name: HouseOf77
+  m_EditorClassIdentifier: HouseOf77.Runtime::HouseOf77.GameConfig
+  waveSeconds: 75
+  revealSeconds: 30
+  jackpotSeconds: 20
+  playerSpeed: 5.8
+  bladeDamage: 12
+  shotsPerSecond: 4.5
+  bossHealth: 5000
+  enemyCapacity: 60
+  projectileCapacity: 250
+  arenaHalfSize: {x: 14.8, y: 7.1}
+  waves:
+  - spawnInterval: 1
+    health: 22
+    speed: 1.4
+  - spawnInterval: 0.78
+    health: 29
+    speed: 1.55
+  - spawnInterval: 0.63
+    health: 35
+    speed: 1.7
+  - spawnInterval: 0.52
+    health: 40
+    speed: 1.85
+  idle:
+  - {fileID: 21300000, guid: d3639012c4dee4ee69a50a9678081028, type: 3}
+  - {fileID: 21300000, guid: 18c032dee58ce464cbb43441cab0469b, type: 3}
+  - {fileID: 21300000, guid: f474c75379aff482e9ca79171e928252, type: 3}
+  - {fileID: 21300000, guid: 0117138230162437ba7efe6913e6235e, type: 3}
+  - {fileID: 21300000, guid: dd36e6287bf244955b1ca2ec35e5304b, type: 3}
+  - {fileID: 21300000, guid: 0bd89784ea07c4d2e882a9306dfb1b73, type: 3}
+  - {fileID: 21300000, guid: 00ee169b5039246868159fd3215e0ea8, type: 3}
+  - {fileID: 21300000, guid: b22f6fd85f5994c2e9bdbaaf801bb2b1, type: 3}
+  run:
+  - {fileID: 21300000, guid: c3ff2b5a9421f4dac97e0da87d7ab9bc, type: 3}
+  - {fileID: 21300000, guid: 67eb7ddb7f1a64a0bbac15bedd528f3f, type: 3}
+  - {fileID: 21300000, guid: 5bbf11f654e074f12b5d90f8fd44c0ab, type: 3}
+  - {fileID: 21300000, guid: faef11e9a78144ab79100e88b271ee50, type: 3}
+  - {fileID: 21300000, guid: 18ff6cdc7da744e6ab9e8e41e14a7eca, type: 3}
+  - {fileID: 21300000, guid: ee4f730c8a6d34e34916eaf71b9fe56f, type: 3}
+  - {fileID: 21300000, guid: 57abbdc30b4cd418ebb1e026f3fab855, type: 3}
+  - {fileID: 21300000, guid: cfd7d3ee0a3384642afa60071704c272, type: 3}
+  cast:
+  - {fileID: 21300000, guid: 751d823ef6e6142c5b3e7cc1f9377cc2, type: 3}
+  - {fileID: 21300000, guid: 8d2b3ecd5386e481e8002e74e9178e32, type: 3}
+  - {fileID: 21300000, guid: cee7e07e2d5324cd5b97b73d863c0738, type: 3}
+  - {fileID: 21300000, guid: d284a84d2548c41eead6b45334ef471f, type: 3}
+  - {fileID: 21300000, guid: ddfb439b9bc4740a0b51a529bbdcd0a2, type: 3}
+  - {fileID: 21300000, guid: 3bd88e6216ff344b58b7904d8de1695c, type: 3}
+  - {fileID: 21300000, guid: 065b006106cd148b08d42b772dcc975a, type: 3}
+  roll:
+  - {fileID: 21300000, guid: 8bfc8b080e7274d56927df367f1f83bc, type: 3}
+  - {fileID: 21300000, guid: 5c5b5c24d837d45b68ee4c4f89e578f4, type: 3}
+  - {fileID: 21300000, guid: ea02de636010542b2ab03fc46e30cb9c, type: 3}
+  - {fileID: 21300000, guid: 650ba6cbee0d847a7925f9905e84166a, type: 3}
+  - {fileID: 21300000, guid: 93419e844374a480d899ce732fc28fae, type: 3}
+  - {fileID: 21300000, guid: 9b1d39968d94f488a9c49acac35536bc, type: 3}
+  - {fileID: 21300000, guid: 533ec7d0e039844acb77466bc2505648, type: 3}
+  hit:
+  - {fileID: 21300000, guid: caed56038dcd24b5baaeac2fea5f664d, type: 3}
+  - {fileID: 21300000, guid: 3908106a27cb946208f5e1d909101fbe, type: 3}
+  - {fileID: 21300000, guid: 985a5080541a246538b9bc72f60025ac, type: 3}
+  - {fileID: 21300000, guid: 3c93b559053a64940a6234ecf484eeb8, type: 3}
+  - {fileID: 21300000, guid: 305df5f0e5e674ea79475d2ddb61dc8e, type: 3}
+  - {fileID: 21300000, guid: de358a3fbb5b641b183ceab569303670, type: 3}
+  death:
+  - {fileID: 21300000, guid: 8d16d27ac10dc4932bef3b79bcc78828, type: 3}
+  - {fileID: 21300000, guid: e8603de65b8b94dc9a1ad0936e9353e6, type: 3}
+  - {fileID: 21300000, guid: 05583c04d25b54c9cb91c2d6c76e4134, type: 3}
+  - {fileID: 21300000, guid: f13085f68efd040cc9273c6886bf20ce, type: 3}
+  - {fileID: 21300000, guid: 3b9ca533f7f154debacd5945f0ee6841, type: 3}
+  - {fileID: 21300000, guid: c1ad38d196c724a23a6a7cb4e711f41d, type: 3}
+  - {fileID: 21300000, guid: acc75288d1da34f42aef4e2340af0a7d, type: 3}
+  - {fileID: 21300000, guid: 03e4531a0388148ab8a3ff33f97c6ab0, type: 3}
+  - {fileID: 21300000, guid: d91aa0db80b39443987f8f2612e8539f, type: 3}
+  - {fileID: 21300000, guid: 5ca0bfad8a7bb49e987318fa0d6c3fc6, type: 3}
+  - {fileID: 21300000, guid: 90be238bdd24e42d09de8de01301b2f5, type: 3}
+  - {fileID: 21300000, guid: 7dcb97621591e4cf6bf1af66f1f19b79, type: 3}
+  blade: {fileID: -8160960831040423917}
+  halberdier: {fileID: 21300000, guid: f107041d890a94f0eb94ceda1f0fdc60, type: 3}
+  valkyrie: {fileID: 21300000, guid: dc226bd8dc5a24672b285927b46c2bda, type: 3}
+  elite: {fileID: 21300000, guid: 37df9f4199e9c4ad7b9855a312b0662b, type: 3}
+  machine: {fileID: 21300000, guid: deb0c03bf66d5466a9038fcf18b3d162, type: 3}
+  symbols:
+  - {fileID: 21300000, guid: 518e39b231a354b73a6d96a8b751013f, type: 3}
+  - {fileID: 21300000, guid: 0d91f6f26221e4454908ee0f2b3a7c7c, type: 3}
+  - {fileID: 21300000, guid: d4f9cd03779fb483994705e5f811b604, type: 3}
+  - {fileID: 21300000, guid: b9f84b457ae0548b8b5e99f1a13d4f3f, type: 3}
+  icons:
+  - {fileID: 21300000, guid: 3cce943f2c110432988075ac6dd39f83, type: 3}
+  - {fileID: 21300000, guid: 13c55e83c8e3446c1bb2acd85b7cf9a2, type: 3}
+  - {fileID: 21300000, guid: 75f054529e19d4c5a967305bb9d45a88, type: 3}
+  - {fileID: 21300000, guid: a372f2564dbcc44c2ae619253866be11, type: 3}
+  - {fileID: 21300000, guid: a99df688929a344d5a37a334e8fbcc35, type: 3}
+  - {fileID: 21300000, guid: 7bcc821ae28754a4db28d293bfd723c3, type: 3}
+  titleLayers:
+  - {fileID: 21300000, guid: 05bdd2b140f9f4f14a489953cda995d5, type: 3}
+  - {fileID: 21300000, guid: f1f03ff1325914c20a72552e51cb6dbc, type: 3}
+  - {fileID: 21300000, guid: 47ffa2e4cd02a46c1bfb0f6b879a3408, type: 3}
+  - {fileID: 21300000, guid: 311ec7a3bed1446d8a89f30929e16de4, type: 3}
+  - {fileID: 21300000, guid: 3216767803f714518b54b56442c41d84, type: 3}
+  arenaMaterial: {fileID: 2100000, guid: 6fbcf8be863a145b7bce5ec814b2fb9f, type: 2}
+  spriteMaterial: {fileID: 2100000, guid: 3dc72f62bfb6e43a0bd001a43175ec07, type: 2}
+  ringMaterial: {fileID: 2100000, guid: b7abb1aba63534f9486ad4d62c7c1940, type: 2}
+  castSound: {fileID: 0}
+  impactSound: {fileID: 0}
+  chipSound: {fileID: 0}
+  reelSound: {fileID: 0}
+  jackpotSound: {fileID: 0}
+  damageSound: {fileID: 0}
+  bossSound: {fileID: 0}
